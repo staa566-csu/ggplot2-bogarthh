@@ -5,28 +5,42 @@ format: html
 editor: visual
 ---
 
-## Summary
+## Data Source
 
-Data Source United Nations, Department of Economic and Social Affairs, Population Division (2022). *World Population Prospects 2022, Online Edition*.
+United Nations, Department of Economic and Social Affairs, Population Division (2022). *World Population Prospects 2022, Online Edition*.
 
 [World Population Prospects - Population Division - United Nations](https://population.un.org/wpp/Download/Standard/CSV/)
 
 ## R Code
 
 ```{r}
-
 library(ggplot2)
 library(tidyverse)
 library(ggthemes)
-
-dem <- read_csv('C:/Users/bogar/Documents/MAS CSU/STAA 566 DATA VISUALIZATION/HW/dem.csv', show_col_types = FALSE)
-
-tfr <- select(dem, LocTypeName, Location, Time, TFR) %>% filter( LocTypeName==c("Development group",LocTypeName = "World")) %>% filter(Time <= 2030)
-
-ggplot(data = tfr, mapping = aes(x = Time, y = TFR, color=Location))+ geom_line()
+library(viridis)
 
 
-```
+dem <- read_csv('dem.csv', show_col_types = FALSE)
 
-```{}
+tfr <- select(dem, LocTypeName, Location, Time, TFR) %>% filter( LocTypeName=="Geographic region" & Location != "Africa" & Time <= 2020 & Time >= 1970)
+
+gtfr <- ggplot(data = tfr, mapping = aes(x = Time, y = TFR, color=Location))
+
+gtfr <- gtfr + geom_line()
+
+gtfr <- gtfr + theme_tufte(base_size=12, base_family = "sans") + labs(title=
+"Children per Woman by Region", subtitle= "Evolution of the Fertility Rate from 1970 to 2020", caption= "United Nations, Department of Economic and Social Affairs") + guides(color=guide_legend(title="Region"))
+
+gtfr <- gtfr + scale_color_viridis(discrete = TRUE)
+
+
+
+
+gtfr <- gtfr + ylab(NULL) + xlab("Year") + scale_x_continuous(breaks = seq(1970,2020,10))  + theme(legend.position = "bottom")
+
+gtfr
+
+
+
+
 ```

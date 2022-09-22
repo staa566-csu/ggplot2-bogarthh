@@ -124,9 +124,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<p>Data Source United Nations, Department of Economic and Social Affairs, Population Division (2022). <em>World Population Prospects 2022, Online Edition</em>.</p>
+<section id="data-source" class="level2">
+<h2 class="anchored" data-anchor-id="data-source">Data Source</h2>
+<p>United Nations, Department of Economic and Social Affairs, Population Division (2022). <em>World Population Prospects 2022, Online Edition</em>.</p>
 <p><a href="https://population.un.org/wpp/Download/Standard/CSV/">World Population Prospects - Population Division - United Nations</a></p>
 </section>
 <section id="r-code" class="level2">
@@ -145,17 +145,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ✖ dplyr::lag()    masks stats::lag()</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dem <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'C:/Users/bogar/Documents/MAS CSU/STAA 566 DATA VISUALIZATION/HW/dem.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tfr <span class="ot">&lt;-</span> <span class="fu">select</span>(dem, LocTypeName, Location, Time, TFR) <span class="sc">%&gt;%</span> <span class="fu">filter</span>( LocTypeName<span class="sc">==</span><span class="fu">c</span>(<span class="st">"Development group"</span>,<span class="at">LocTypeName =</span> <span class="st">"World"</span>)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Time <span class="sc">&lt;=</span> <span class="dv">2030</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tfr, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Time, <span class="at">y =</span> TFR, <span class="at">color=</span>Location))<span class="sc">+</span> <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: viridisLite</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dem <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'dem.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tfr <span class="ot">&lt;-</span> <span class="fu">select</span>(dem, LocTypeName, Location, Time, TFR) <span class="sc">%&gt;%</span> <span class="fu">filter</span>( LocTypeName<span class="sc">==</span><span class="st">"Geographic region"</span> <span class="sc">&amp;</span> Location <span class="sc">!=</span> <span class="st">"Africa"</span> <span class="sc">&amp;</span> Time <span class="sc">&lt;=</span> <span class="dv">2020</span> <span class="sc">&amp;</span> Time <span class="sc">&gt;=</span> <span class="dv">1970</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>gtfr <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> tfr, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Time, <span class="at">y =</span> TFR, <span class="at">color=</span>Location))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>gtfr <span class="ot">&lt;-</span> gtfr <span class="sc">+</span> <span class="fu">geom_line</span>()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>gtfr <span class="ot">&lt;-</span> gtfr <span class="sc">+</span> <span class="fu">theme_tufte</span>(<span class="at">base_size=</span><span class="dv">12</span>, <span class="at">base_family =</span> <span class="st">"sans"</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">"Children per Woman by Region"</span>, <span class="at">subtitle=</span> <span class="st">"Evolution of the Fertility Rate from 1970 to 2020"</span>, <span class="at">caption=</span> <span class="st">"United Nations, Department of Economic and Social Affairs"</span>) <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">color=</span><span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">"Region"</span>))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>gtfr <span class="ot">&lt;-</span> gtfr <span class="sc">+</span> <span class="fu">scale_color_viridis</span>(<span class="at">discrete =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>gtfr <span class="ot">&lt;-</span> gtfr <span class="sc">+</span> <span class="fu">ylab</span>(<span class="cn">NULL</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1970</span>,<span class="dv">2020</span>,<span class="dv">10</span>))  <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>gtfr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<pre><code></code></pre>
 </section>
 
 </main>
