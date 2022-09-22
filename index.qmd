@@ -5,23 +5,28 @@ format: html
 editor: visual
 ---
 
-## Quarto
+## Summary
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+Data Source United Nations, Department of Economic and Social Affairs, Population Division (2022). *World Population Prospects 2022, Online Edition*.
 
-## Running Code
+[World Population Prospects - Population Division - United Nations](https://population.un.org/wpp/Download/Standard/CSV/)
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
+## R Code
 
 ```{r}
-#| echo: false
-2 * 2
+
+library(ggplot2)
+library(tidyverse)
+library(ggthemes)
+
+dem <- read_csv('C:/Users/bogar/Documents/MAS CSU/STAA 566 DATA VISUALIZATION/HW/dem.csv', show_col_types = FALSE)
+
+tfr <- select(dem, LocTypeName, Location, Time, TFR) %>% filter( LocTypeName==c("Development group",LocTypeName = "World")) %>% filter(Time <= 2030)
+
+ggplot(data = tfr, mapping = aes(x = Time, y = TFR, color=Location))+ geom_line()
+
+
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{}
+```
